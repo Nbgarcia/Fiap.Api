@@ -4,24 +4,30 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do DbContext com a conexão ao banco
+// Configuraï¿½ï¿½o do DbContext com a conexï¿½o ao banco
+var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+var db = Environment.GetEnvironmentVariable("POSTGRES_DB");
+var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={password}";
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
-
-// Registrar outros serviços necessários (como repositórios, etc.)
+// Registrar outros serviï¿½os necessï¿½rios (como repositï¿½rios, etc.)
 builder.Services.AddScoped<IMedicoHandler, MedicoHandler>();
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Configuração do Swagger para documentação de APIs
+// Configuraï¿½ï¿½o do Swagger para documentaï¿½ï¿½o de APIs
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configurar o pipeline de requisição HTTP
+// Configurar o pipeline de requisiï¿½ï¿½o HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,7 +38,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-// Mapear os controllers da aplicação
+// Mapear os controllers da aplicaï¿½ï¿½o
 app.MapControllers();
 
 app.Run();
