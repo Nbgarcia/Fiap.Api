@@ -1,9 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["Fiap.Api.csproj", "."]
-RUN dotnet restore "./Fiap.Api.csproj"
 COPY . .
-WORKDIR "/src/."
+RUN dotnet restore "./Fiap.Api.csproj"
 RUN dotnet build "./Fiap.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
